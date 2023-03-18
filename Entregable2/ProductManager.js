@@ -124,8 +124,8 @@ class ProductManager {
     try {
       const productFile = await fs.readFile(this.path, `utf-8`);
       object = JSON.parse(productFile);
+      this.#autoId = object.nextId;
       this.#products = object.products;
-      this.#autoId = object.id;
       //   console.log(this.#autoId);
     } catch (error) {
       await this.charge();
@@ -135,7 +135,7 @@ class ProductManager {
   // Carga productos al archivo
   async charge() {
     let object = {};
-    Object.assign(object, { id: this.#autoId, products: this.#products });
+    Object.assign(object, { nextId: this.#autoId, products: this.#products });
     try {
       fs.writeFile(this.path, JSON.stringify(object, null, 2));
     } catch (error) {
