@@ -119,14 +119,13 @@ class ProductManager {
   }
 
   // Extraccion de productos desde el archivo
-  async load(path) {
+  async load() {
     let object = {};
     try {
       const productFile = await fs.readFile(this.path, `utf-8`);
       object = JSON.parse(productFile);
       this.#autoId = object.nextId;
       this.#products = object.products;
-      //   console.log(this.#autoId);
     } catch (error) {
       await this.charge();
     }
@@ -140,38 +139,37 @@ class ProductManager {
       fs.writeFile(this.path, JSON.stringify(object, null, 2));
     } catch (error) {
       throw new Error(e);
-      return `Error al escribir el archivo`;
     }
   }
 
   // Reglas a comprobar
   verify(product) {
-    let value = false;
-    value =
-      (product.title &&
-        product.description &&
-        product.price &&
-        product.thumbnail &&
-        product.code &&
-        product.stock &&
-        true) ||
-      false
-        ? this.#products.filter((value) => value.code === product.code)
-            .length ?? false > 0
-          ? console.log("Código existente") && false
-          : true
-        : console.log("Todos los campos son obligatorios") && false;
-    return value;
+    let condition =
+      product.title &&
+      product.description &&
+      product.price &&
+      product.thumbnail &&
+      product.code &&
+      product.stock;
+    if (condition) {
+      return !this.#products.filter((value) => value.code === product.code).length ??
+        false > 0;
+    } else {
+      return false;
+    }
   }
 
   // Agregar Productos
   async addProduct(product) {
     await this.load();
-    this.verify(product)
-      ? Object.assign(product, { id: this.#autoId++ }) &&
-        this.#products.push(product)
-      : console.log("Producto no agregado");
-    await this.charge();
+    const condition = this.verify(product);
+    if (condition) {
+      Object.assign(product, { id: this.#autoId++ });
+      this.#products.push(product);
+      await this.charge();
+      return true;
+    }
+    return false;
   }
 
   // Listar productos
@@ -184,22 +182,28 @@ class ProductManager {
   async updateProduct(product, id) {
     await this.load();
     const idProduct = this.#products.findIndex((item) => item.id === id);
-    idProduct !== -1 && this.verify(product)
-      ? Object.assign(product, { id: id }) &&
-        this.#products.splice(idProduct, 1, product)
-      : (await this.addProduct(product)) &&
-        console.log(`Producto no encontrado, se agregó al listado`);
-    await this.charge();
+    const condition = idProduct !== -1 && this.verify(product);
+    if (condition) {
+      Object.assign(product, { id: id });
+      this.#products.splice(idProduct, 1, product);
+      await this.charge();
+      return true;
+    } else {
+      await this.addProduct(product);
+      return false;
+    }
   }
 
   // Eliminar producto
   async deleteProduct(id) {
     await this.load();
     const idProduct = this.#products.findIndex((item) => item.id === id);
-    idProduct !== -1
-      ? this.#products.splice(idProduct, 1) && console.log(`Producto eliminado`)
-      : console.log(`Producto no encontrado, no se eliminó ningun producto`);
-    await this.charge();
+    if (idProduct !== -1) {
+      this.#products.splice(idProduct, 1);
+      await this.charge();
+      return true;
+    }
+    return false;
   }
 
   // Producto por ID
@@ -215,17 +219,21 @@ const main = async () => {
   const manager = new ProductManager("./productos.json");
   // Cargar productos
   productos.map(async (product) => {
-    await manager.addProduct(product);
+    (await manager.addProduct(product))
+      ? console.log("Producto agregado exitosamente")
+      : console.log("El producto no puedo ser agregado");
   });
-  
+
   // Prueba del método getProducts
   console.log(await manager.getProducts());
 
   // Eliminar 2° producto
-  await manager.deleteProduct(2);
+  (await manager.deleteProduct(2))
+    ? console.log("Producto borrado exitosamente")
+    : console.log("El producto no puedo ser borrado");
 
   // Actualizar 1° producto
-  await manager.updateProduct(
+  (await manager.updateProduct(
     {
       title: "brocoli",
       description: "aqui va la descripción del producto",
@@ -235,7 +243,9 @@ const main = async () => {
       stock: 50,
     },
     1
-  );
+  ))
+    ? console.log("Producto actualizado exitosamente")
+    : console.log("El producto no puedo ser actualizado");
 
   // Prueba del método getProductById
   console.log("\n");
