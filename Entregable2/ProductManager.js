@@ -144,7 +144,7 @@ class ProductManager {
 
   // Reglas a comprobar
   verify(product) {
-    let condition =
+    const condition =
       product.title &&
       product.description &&
       product.price &&
