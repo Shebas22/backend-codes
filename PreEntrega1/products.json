@@ -1,0 +1,101 @@
+{
+  "nextId": 14,
+  "products": [
+    {
+      "title": "brocoli",
+      "description": "aqui va la descripción del producto",
+      "price": 250,
+      "thumbnail": [
+        "https://i.imgur.com/W9XGUbf.png"
+      ],
+      "code": "bro250",
+      "stock": 50,
+      "status": true,
+      "id": 1
+    },
+    {
+      "title": "ajo",
+      "description": "aqui va la descripción del producto",
+      "price": 150,
+      "thumbnail": [
+        "https://i.imgur.com/oOKVzcq.png"
+      ],
+      "code": "ajo150",
+      "stock": 93,
+      "status": true,
+      "id": 3
+    },
+    {
+      "title": "alcaucil",
+      "description": "aqui va la descripción del producto",
+      "price": 150,
+      "thumbnail": [
+        "https://i.imgur.com/Fkl6USU.png"
+      ],
+      "code": "alc150",
+      "stock": 25,
+      "status": true,
+      "id": 4
+    },
+    {
+      "title": "anana",
+      "description": "aqui va la descripción del producto",
+      "price": 550,
+      "thumbnail": [
+        "https://i.imgur.com/R4rpUIq.png"
+      ],
+      "code": "ana550",
+      "stock": 100,
+      "status": true,
+      "id": 5
+    },
+    {
+      "title": "apio",
+      "description": "aqui va la descripción del producto",
+      "price": 180,
+      "thumbnail": [
+        "https://i.imgur.com/73p4IIr.png"
+      ],
+      "code": "api180",
+      "stock": 88,
+      "status": true,
+      "id": 6
+    },
+    {
+      "title": "banana",
+      "description": "aqui va la descripción del producto",
+      "price": 429,
+      "thumbnail": [
+        "https://i.imgur.com/iyp17n5.png"
+      ],
+      "code": "ban429",
+      "stock": 46,
+      "status": true,
+      "id": 7
+    },
+    {
+      "title": "batata",
+      "description": "aqui va la descripción del producto",
+      "price": 220,
+      "thumbnail": [
+        "https://i.imgur.com/anh6M3L.png"
+      ],
+      "code": "bat220",
+      "stock": 130,
+      "status": true,
+      "id": 8
+    },
+    {
+      "title": "berenjena",
+      "description": "aqui va la descripción del producto",
+      "price": 180,
+      "thumbnail": [
+        "https://i.imgur.com/anh6M3L.png"
+      ],
+      "code": "ber180",
+      "stock": 20,
+      "status": true,
+      "id": 9
+    }
+  ]
+}
