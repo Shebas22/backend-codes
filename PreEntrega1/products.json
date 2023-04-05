@@ -1,5 +1,5 @@
 {
-  "nextId": 14,
+  "nextId": 16,
   "products": [
     {
       "title": "brocoli",
@@ -96,6 +96,30 @@
       "stock": 20,
       "status": true,
       "id": 9
+    },
+    {
+      "title": "pera",
+      "description": "aqui va la descripción del producto",
+      "price": 250,
+      "thumbnail": [
+        "https://i.imgur.com/W9XGUbf.png"
+      ],
+      "code": "per250",
+      "stock": 50,
+      "status": true,
+      "id": 14
+    },
+    {
+      "title": "papa",
+      "description": "aqui va la descripción del producto",
+      "price": 250,
+      "thumbnail": [
+        "https://i.imgur.com/W9XGUbf.png"
+      ],
+      "code": "pap250",
+      "stock": 50,
+      "status": true,
+      "id": 15
     }
   ]
 }

@@ -2,7 +2,7 @@ import { Router } from "express";
 import ProductManager from "../controllers/ProductManager.js";
 
 const productRouter = Router();
-const productManager = new ProductManager("./products.json");
+const productManager = new ProductManager();
 
 // Métodos gets del Router
 productRouter.get('/', async (req, res) => {
@@ -38,17 +38,21 @@ productRouter.get('/:pid', async (req, res) => {
 
 // Método post del Router
 productRouter.post('/', async (req, res) => {
-    const products = req.body;
-    const createCart = await cartManager.create(products)
-    if (createCart) {
+    const product = req.body;
+    if (Object.keys(product).length !== 0) {
+        const addProduct = await productManager.add(product)
+        if (addProduct) {
+            return res
+                .status(201)
+                .send({ status: 'Success', created: addProduct })
+        }
         return res
-            .status(201)
-            .send({ status: 'Success', created: createCart })
+            .status(200)
+            .send({ status: 'Error', message: 'Product not added' })
     }
     return res
         .status(200)
-        .send({ status: 'Error', message: 'Cart not created' })
-
+        .send({ status: 'Error', message: 'A product was expected' })
 });
 
 // Método put del Router
@@ -64,7 +68,7 @@ productRouter.put('/:pid', async (req, res) => {
         }
         return res
             .status(200)
-            .send({ status: 'Error', added: 'Product not updated' });
+            .send({ status: 'Error', message: 'Product not updated' });
     }
     return res
         .status(200)

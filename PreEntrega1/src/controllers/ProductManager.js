@@ -7,9 +7,9 @@ class ProductManager {
   path;
 
   // Constructor
-  constructor(path) {
+  constructor() {
     this.#products = [];
-    this.path = path;
+    this.path = "./products.json";
   }
 
   // Extraccion de productos desde el archivo
@@ -62,7 +62,7 @@ class ProductManager {
       Object.assign(product, { id: this.#autoId++ });
       this.#products.push(product);
       await this.charge();
-      return true;
+      return product;
     }
     return false;
   }
@@ -92,7 +92,7 @@ class ProductManager {
   // Eliminar producto
   async delete(id) {
     await this.load();
-    const idProduct = this.#products.findIndex((item) => item.id === id);
+    const idProduct = this.#products.findIndex((item) => item.id == id);
     if (idProduct !== -1) {
       const product = this.#products.splice(idProduct, 1);
       await this.charge();
@@ -104,8 +104,8 @@ class ProductManager {
   // Producto por ID
   async getById(id) {
     await this.load();
-    // return this.#products.find((item) => item.id === id) ?? "Not Found";
-    return this.#products.find((item) => item.id === id);
+    // return this.#products.find((item) => item.id == id) ?? "Not Found";
+    return this.#products.find((item) => item.id == id);
   }
 }
 

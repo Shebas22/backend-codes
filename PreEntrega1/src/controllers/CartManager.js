@@ -7,9 +7,9 @@ class CartManager {
     path;
 
     // Constructor
-    constructor(path) {
+    constructor() {
         this.#carts = [];
-        this.path = path;
+        this.path = "./carts.json";
     }
 
     // Extraccion de carritos desde el archivo
@@ -28,84 +28,68 @@ class CartManager {
     // Carga carritos al archivo
     async charge() {
         let object = {};
-        Object.assign(object, { nextId: this.#autoId, products: this.#carts });
+        Object.assign(object, { nextId: this.#autoId, carts: this.#carts });
         try {
             fs.writeFile(this.path, JSON.stringify(object, null, 2));
         } catch (error) {
-            // console.log('error al escribir');
+            // return false
             throw new Error(e);
         }
     }
 
-    // Reglas a comprobar
-    verify(product) {
-        const condition =
-            product.title &&
-            product.description &&
-            product.price &&
-            product.status &&
-            product.code &&
-            product.stock;
-        if (condition) {
-            return !this.#products.filter((value) => value.code === product.code).length ??
-                false > 0;
-        } else {
-            return false;
-        }
-    }
 
-    // Agregar Productos
-    async add(product) {
+    // Crear carrito
+    async create() {
         await this.load();
-        const condition = this.verify(product);
-        if (condition) {
-            Object.assign(product, { id: this.#autoId++ });
-            this.#products.push(product);
-            await this.charge();
-            return true;
-        }
-        return false;
+        const cart = { products: [], id: this.#autoId++ }
+        this.#carts.push(cart);
+        await this.charge();
+        return cart;
     }
 
-    // Listar productos
+    // Listar carritos
     async get() {
         await this.load();
-        return this.#products;
+        return this.#carts;
     }
 
-    // Actualizar productos
-    async update(product, id) {
+    async addProductToCart(cId, productAdd) {
         await this.load();
-        const idProduct = this.#products.findIndex((item) => item.id === id);
-        const condition = idProduct !== -1 && this.verify(product);
-        if (condition) {
-            Object.assign(product, { id: id });
-            const updateProduct = this.#products.splice(idProduct, 1, product);
+        const { product } = productAdd
+        const cartIndex = this.#carts.findIndex((item) => item.id == cId);
+        if (cartIndex !== -1) {
+            const { products } = this.#carts[cartIndex]
+            const productIndex = products.findIndex((item) => item.product.id == product.id);
+            if (productIndex !== -1) {
+                products[productIndex].quantity += productAdd.quantity
+            }
+            else {
+                products.push(productAdd)
+            }
             await this.charge();
-            return updateProduct;
-        } else {
-            // await this.add(product);
-            return false;
+            return product
         }
+        return false
     }
 
-    // Eliminar producto
+
+    // Eliminar carrito
     async delete(id) {
         await this.load();
-        const idProduct = this.#products.findIndex((item) => item.id === id);
-        if (idProduct !== -1) {
-            const product = this.#products.splice(idProduct, 1);
+        const cartIndex = this.#carts.findIndex((item) => item.id == id);
+        if (cartIndex !== -1) {
+            const cart = this.#carts.splice(cartIndex, 1);
             await this.charge();
-            return product;
+            return cart;
         }
         return false;
     }
 
-    // Producto por ID
+    // Carrito por ID
     async getById(id) {
         await this.load();
-        // return this.#products.find((item) => item.id === id) ?? "Not Found";
-        return this.#products.find((item) => item.id === id);
+        // return this.#carts.find((item) => item.id === id) ?? "Not Found";
+        return this.#carts.find((item) => item.id === id);
     }
 }
 
