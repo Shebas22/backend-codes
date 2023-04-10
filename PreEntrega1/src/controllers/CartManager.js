@@ -9,7 +9,7 @@ class CartManager {
     // Constructor
     constructor() {
         this.#carts = [];
-        this.path = "./carts.json";
+        this.path = "./src/carts.json";
     }
 
     // Extraccion de carritos desde el archivo

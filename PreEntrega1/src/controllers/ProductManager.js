@@ -9,7 +9,7 @@ class ProductManager {
   // Constructor
   constructor() {
     this.#products = [];
-    this.path = "./products.json";
+    this.path = "./src/products.json";
   }
 
   // Extraccion de productos desde el archivo
