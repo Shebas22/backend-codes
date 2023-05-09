@@ -86,5 +86,38 @@ export const addProduct = async (req, res) => {
 
 };
 
+export const updateProduct = async (req, res) => {
+  const { cid, pid } = req.params;
+  const quantity = +req.body.quantity;
+  const manager = new cartManager();
+  const cart = await manager.updateProduct(cid, pid, quantity);
+  if (cart) {
+    return res
+      .status(201)
+      .send({ status: 'success', cart, message: 'Cart updated.' });
+  }
+  return res
+    .status(200)
+    .send({ status: "Error", messagge: "Cart not updated." });
+
+};
+
+export const deleteProduct = async (req, res) => {
+  const { cid, pid } = req.params;
+  const manager = new cartManager();
+  const cart = await manager.deleteProduct(cid, pid);
+  if (cart) {
+    return res
+      .status(201)
+      .send({ status: 'success', cart, message: 'Cart deleted.' });
+  }
+  return res
+    .status(200)
+    .send({ status: "Error", messagge: "Cart not deleted." });
+
+};
+
+
+
 
 
