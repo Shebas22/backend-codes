@@ -25,24 +25,32 @@ class CartMongooseDao {
   async getOne(id) {
     const cartDocument = await cartSchema
       .findOne({ _id: id })
-    if (!cartDocument) {
+    if (!cartDocument._id) {
       return false
     }
-console.log(cartDocument);
-    return {
+
+    const cart = {
       id: cartDocument._id,
-      products: cartDocument.products.map(product => ({
-        id: product._id,
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        thumbnail: product.thumbnail,
-        code: product.code,
-        stock: product.stock,
-        status: product.status
-      })),
-      status: cartDocument.status
-    }
+      status: cartDocument.status,
+      products: [],
+    };
+  
+    cartDocument.products.forEach((product) => {
+      cart.products.push({
+        id: product.product._id,
+        title: product.product.title,
+        description: product.product.description,
+        price: product.product.price,
+        thumbnail: product.product.thumbnail,
+        code: product.product.code,
+        stock: product.product.stock,
+        status: product.product.status,
+        quantity: product.quantity,
+      });
+    });
+  console.log('carrito armado');
+  console.log(cart);
+    return cart;
   }
 
   async create(data) {
@@ -69,7 +77,7 @@ console.log(cartDocument);
 
     const cartDocument = await cartSchema.findOneAndUpdate({ _id: id }, data, { new: true })
   
-    if (!cartDocument) {
+    if (!cartDocument.id) {
       return false;
     }
 

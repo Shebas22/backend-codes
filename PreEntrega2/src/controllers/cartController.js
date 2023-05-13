@@ -109,11 +109,11 @@ export const deleteProduct = async (req, res) => {
   if (cart) {
     return res
       .status(201)
-      .send({ status: 'success', cart, message: 'Cart deleted.' });
+      .send({ status: 'success', cart, message: 'Product deleted.' });
   }
   return res
     .status(200)
-    .send({ status: "Error", messagge: "Cart not deleted." });
+    .send({ status: "Error", messagge: "Product not deleted." });
 
 };
 
