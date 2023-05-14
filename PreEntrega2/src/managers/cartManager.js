@@ -23,96 +23,79 @@ class CartManager {
     return this.cartDao.updateOne(id, data);
   }
 
-  async deleteOne(id) {
-    return this.cartDao.deleteOne(id);
+  async deleteAllProducts(id) {
+    const cart = await this.cartDao.getOne(id);
+
+    if (!cart || !cart.products.length) {
+      return false;
+    }
+
+    const clearCart = {
+      id: cart.id,
+      status: cart.status,
+      products: [],
+    };
+
+    return await this.cartDao.updateOne(id, clearCart);
   }
 
   async addProduct(cid, pid) {
     const cart = await this.cartDao.getOne(cid);
-    console.log('add cart manager recibe');
-    console.log(cart);
-
-    if (!cart.id) {
-      return false;
-    }
-
-    const oldcart = {
-      id: cart.id,
-      status: cart.status,
-      products: [],
-    };
-
     const product = await this.productDao.getOne(pid);
-    if (!product.id) {
+
+    if (!cart || !cart.id || !product || !product.id) {
       return false;
     }
 
-    if (cart.products.length) {
-      cart.products.forEach((product) => {
-        oldcart.products.push({
-          product: product.id,
-          quantity: product.quantity
-        });
-      });
-      const existingProduct = oldcart.products.findIndex((p) => p.product.toString() === pid.toString());
+    const existingProduct = cart.products.find(
+      (p) => p.id.toString() === pid.toString()
+    );
 
-      if (existingProduct >= 0) {
-        oldcart.products[existingProduct].quantity += 1
-      } else {
-        oldcart.products.push({ product: product.id, quantity: 1 });
-      }
-
+    if (existingProduct) {
+      existingProduct.quantity++;
     } else {
-      oldcart.products.push({ product: product.id, quantity: 1 });
+      cart.products.push({ id: product.id, quantity: 1 });
     }
-    return await this.cartDao.updateOne(cid, oldcart);
+
+    return await this.cartDao.updateOne(cid, cart);
   }
 
   async deleteProduct(cid, pid) {
     const cart = await this.cartDao.getOne(cid);
+
     if (!cart || !cart.products.length) {
-      return false
-    }
-    const product = cart.products.find(product => product.id.toString() === pid.toString())
-    if (!product) {
-      return false
+      return false;
     }
 
-    const oldcart = {
-      id: cart.id,
-      status: cart.status,
-      products: [],
-    };
+    const index = cart.products.findIndex(
+      (product) => product.id.toString() === pid.toString()
+    );
 
-    cart.products.forEach((product) => {
-      if (product.id.toString() !== pid.toString()) {
-        oldcart.products.push({
-          product: product.id,
-          quantity: product.quantity
-        });
-      }
-    });
-    return await this.cartDao.updateOne(cid, oldcart);
+    if (index >= 0) {
+      cart.products.splice(index, 1);
+      return await this.cartDao.updateOne(cid, cart);
+    } else {
+      return false;
+    }
   }
 
   async updateProduct(cid, pid, quantity) {
     const cart = await this.cartDao.getOne(cid);
-    if (!cart || cart.products.length) {
-      return false
+
+    if (!cart || !cart.products.length) {
+      return false;
     }
 
-    const product = cart.products.find(product => product.id.toString() === pid.toString())
-    if (product) {
-      return false
+    const product = cart.products.find(
+      (product) => product.id.toString() === pid.toString()
+    );
+
+    if (!product) {
+      return false;
     }
 
-    const oldProducts = cart.products.map(product => product);
-    oldProducts.forEach((product) => {
-      if (product.id.toString() === pid.toString()) {
-        product.quantity = quantity;
-      }
-    });
-    cart.products = oldProducts;
+    product.quantity = quantity;
+
     return await this.cartDao.updateOne(cid, cart);
   }
 }

@@ -1,47 +1,15 @@
-// import mongoose, { Schema } from "mongoose";
-
-// const cartCollection = 'carts';
-
-// // const productSchema = new Schema(
-// //   {
-  // //   _id:{ type: Schema.Types.ObjectId, requiere: true, index: true, ref: 'products'},
-// //   },
-// //   {_id: false}
-// // );
-
-// const cartSchema = new Schema({
-//   products: [{ type: Schema.Types.ObjectId, index: true, ref: 'products', default:[]}&&{quantity: { type: Schema.Types.Number, default: 1 }}],
-//   status: { type: Schema.Types.Boolean, default: true }
-// });
-
-// cartSchema.pre('find', function () {
-//   this.populate(['products']);
-// });
-
-// cartSchema.pre('findOne', function () {
-//   this.populate(['products']);
-// });
-
-// cartSchema.pre('findOneAndUpdate', function () {
-//   this.populate(['products']);
-// });
-
-
-// export default mongoose.model(cartCollection, cartSchema);
-
-
 import mongoose, { Schema } from "mongoose";
 
-const cartCollection = 'carts';
+const cartCollection = "carts";
 
 const cartSchema = new Schema({
   status: {
     type: Boolean,
-    default: true
+    default: true,
   },
   products: [
     {
-      product: {
+      id: {
         type: Schema.Types.ObjectId,
         ref: "products",
         required: true,
@@ -50,28 +18,29 @@ const cartSchema = new Schema({
         type: Number,
         default: 1,
       },
-      _id:false
+      _id: false,
     },
   ],
 });
 
-cartSchema.pre('find', function () {
-  this.populate(['products.product']);
+cartSchema.pre("create", function () {
+  this.populate(["products.id"]);
 });
 
-cartSchema.pre('getOne', function () {
-  this.populate(['products.product']);
+cartSchema.pre("find", function () {
+  this.populate(["products.id"]);
 });
 
-cartSchema.pre('findOne', function () {
-  this.populate(['products.product']);
+cartSchema.pre("getOne", function () {
+  this.populate(["products.id"]);
 });
 
-cartSchema.pre('findOneAndUpdate', function () {
-  this.populate(['products.product']);
+cartSchema.pre("findOne", function () {
+  this.populate(["products.id"]);
 });
 
-
-// const Cart = mongoose.model("Cart", cartSchema);
+cartSchema.pre("findOneAndUpdate", function () {
+  this.populate(["products.id"]);
+});
 
 export default mongoose.model(cartCollection, cartSchema);

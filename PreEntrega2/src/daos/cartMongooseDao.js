@@ -1,135 +1,97 @@
 import cartSchema from "./models/cartSchema.js";
 
 class CartMongooseDao {
-
   async find() {
-    const cartsDocuments = await cartSchema
-    .find();
+    const cartsDocuments = await cartSchema.find();
 
-    return cartsDocuments.map(document => ({
-      id: document._id,
-      products: document.products.map(product => ({
-        id: product._id,
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        thumbnail: product.thumbnail,
-        code: product.code,
-        stock: product.stock,
-        status: product.status
-      })),
-      status: document.status
-    }));
+    return cartsDocuments.map((document) => {
+      return {
+        id: document._id,
+        products: document.products.map((product) => {
+          return {
+            id: product.id._id,
+            title: product.id.title,
+            description: product.id.description,
+            price: product.id.price,
+            thumbnail: product.id.thumbnail,
+            code: product.id.code,
+            stock: product.id.stock,
+            status: product.id.status,
+            quantity: product.quantity,
+          };
+        }),
+        status: document.status,
+      };
+    });
   }
 
   async getOne(id) {
-    const cartDocument = await cartSchema
-      .findOne({ _id: id })
-    if (!cartDocument._id) {
-      return false
-    }
-
-    const cart = {
-      id: cartDocument._id,
-      status: cartDocument.status,
-      products: [],
-    };
-  
-    cartDocument.products.forEach((product) => {
-      cart.products.push({
-        id: product.product._id,
-        title: product.product.title,
-        description: product.product.description,
-        price: product.product.price,
-        thumbnail: product.product.thumbnail,
-        code: product.product.code,
-        stock: product.product.stock,
-        status: product.product.status,
-        quantity: product.quantity,
-      });
-    });
-  console.log('carrito armado');
-  console.log(cart);
-    return cart;
-  }
-
-  async create(data) {
-    const cartDocument = await cartSchema
-    .create(data);
-
-    return {
-      id: cartDocument._id,
-      products: cartDocument.products.map(product => ({
-        id: product._id,
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        thumbnail: product.thumbnail,
-        code: product.code,
-        stock: product.stock,
-        status: product.status
-      })),
-      status: cartDocument.status
-    }
-  }
-
-  async updateOne(id, data) {
-
-    const cartDocument = await cartSchema.findOneAndUpdate({ _id: id }, data, { new: true })
-  
-    if (!cartDocument.id) {
+    const cartDocument = await cartSchema.findOne({ _id: id });
+    if (!cartDocument) {
       return false;
     }
 
-  
-    const cart = {
+    const products = cartDocument.products.map((product) => {
+      return {
+        id: product.id._id,
+        title: product.id.title,
+        description: product.id.description,
+        price: product.id.price,
+        thumbnail: product.id.thumbnail,
+        code: product.id.code,
+        stock: product.id.stock,
+        status: product.id.status,
+        quantity: product.quantity,
+      };
+    });
+
+    return {
       id: cartDocument._id,
       status: cartDocument.status,
-      products: [],
+      products: products,
     };
-  
-    cartDocument.products.forEach((product) => {
-      cart.products.push({
-        id: product.product._id,
-        title: product.product.title,
-        description: product.product.description,
-        price: product.product.price,
-        thumbnail: product.product.thumbnail,
-        code: product.product.code,
-        stock: product.product.stock,
-        status: product.product.status,
-        quantity: product.quantity,
-      });
-    });
-  
-    return cart;
   }
 
+  async create(data) {
+    const cartDocument = await cartSchema.create(data);
 
-  // async updateOne(id, cart) {
-  //   const cartDocument = await cartSchema
-  //   .findOneAndUpdate({ _id: id }, cart, { new: true })
-  // if (!cartDocument._id) {
-  //   return false
-  // }
+    if (!cartDocument) {
+      return false;
+    }
 
+    return this.getOne(cartDocument.id);
+  }
 
-  //   return {
-  //     id: cartDocument._id,
-  //     products: cartDocument.products.map(product => ({
-  //       id: product._id,
-  //       title: product.title,
-  //       description: product.description,
-  //       price: product.price,
-  //       thumbnail: product.thumbnail,
-  //       code: product.code,
-  //       stock: product.stock,
-  //       status: product.status
-  //     })),
-  //     status: cartDocument.status
-  //   }
-  // }
-  
+  async updateOne(id, data) {
+    const cartDocument = await cartSchema.findOneAndUpdate({ _id: id }, data, {
+      new: true,
+    });
+
+    if (!cartDocument) {
+      return false;
+    }
+
+    const products = cartDocument.products.map((product) => {
+      return {
+        id: product.id._id,
+        title: product.id.title,
+        description: product.id.description,
+        price: product.id.price,
+        thumbnail: product.id.thumbnail,
+        code: product.id.code,
+        stock: product.id.stock,
+        status: product.id.status,
+        quantity: product.quantity,
+      };
+    });
+
+    return {
+      id: cartDocument._id,
+      status: cartDocument.status,
+      products: products,
+    };
+  }
+
   async deleteOne(id) {
     return cartSchema.deleteOne({ _id: id });
   }

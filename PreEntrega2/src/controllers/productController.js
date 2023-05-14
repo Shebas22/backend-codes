@@ -15,7 +15,7 @@ export const getOne = async (req, res) => {
 
     if (!product) {
         return res
-            .status(200)
+            .status(404)
             .send({ status: "Error", messagge: "Product not found." });
     }
     return res
@@ -35,7 +35,7 @@ export const save = async (req, res) => {
                 .send({ status: 'success', addProduct, message: 'Product created.' })
         }
         return res
-            .status(200)
+            .status(404)
             .send({ status: 'Error', message: 'Product not created' })
     }
     return res
@@ -56,11 +56,11 @@ export const update = async (req, res) => {
                 .send({ status: 'success', updateProduct, message: 'Product updated.' });
         }
         return res
-            .status(200)
+            .status(404)
             .send({ status: 'Error', message: 'Product not updated' });
     }
     return res
-        .status(200)
+        .status(400)
         .send({ status: 'Error', message: 'A product was expected' })
 };
 
@@ -75,7 +75,7 @@ export const deleteOne = async (req, res) => {
             .send({ status: 'success', message: 'Product deleted.' });
     }
     return res
-        .status(200)
+        .status(404)
         .send({ status: 'Error', messagge: 'No product has been deleted' });
 };
 

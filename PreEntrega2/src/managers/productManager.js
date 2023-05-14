@@ -14,7 +14,7 @@ class ProductManager {
       product.thumbnail &&
       product.code &&
       product.stock
-    )
+    );
   }
 
   async paginate(req) {
@@ -27,13 +27,13 @@ class ProductManager {
 
   async create(data) {
     if (this.verify(data)) {
-    return await this.productDao.create(data);
+      return await this.productDao.create(data);
     }
   }
 
   async updateOne(id, data) {
     if (this.verify(data)) {
-    return this.productDao.updateOne(id, data);
+      return this.productDao.updateOne(id, data);
     }
   }
 

@@ -1,123 +1,89 @@
-import cartManager from "../managers/cartManager.js";
+import CartManager from "../managers/cartManager.js";
+
+const cartManager = new CartManager();
 
 export const list = async (req, res) => {
-  const manager = new cartManager();
-  const carts = await manager.find();
-
-  return res
-    .status(200)
-    .send({ status: 'success', carts })
+  const carts = await cartManager.find();
+  res.status(200).json({ status: "success", carts });
 };
 
 export const getOne = async (req, res) => {
   const { id } = req.params;
-  const manager = new cartManager();
-  const cart = await manager.getOne(id);
-
+  const cart = await cartManager.getOne(id);
   if (!cart) {
     return res
-      .status(200)
-      .send({ status: "Error", messagge: "Cart not found." });
+      .status(404)
+      .json({ status: "error", message: "Cart not found." });
   }
-  return res
-    .status(200)
-    .send({ status: 'success', cart });
-
+  res.status(200).json({ status: "success", cart });
 };
 
 export const save = async (req, res) => {
-  const manager = new cartManager();
-  const cart = await manager.create(req.body);
-
-  if (cart) {
+  const cart = await cartManager.create(req.body);
+  if (!cart) {
     return res
-      .status(201)
-      .send({ status: 'success', cart, message: 'Cart created.' })
+      .status(400)
+      .json({ status: "error", message: "Cart not created" });
   }
-  return res
-    .status(200)
-    .send({ status: 'Error', message: 'Cart not created' })
-
+  res.status(201).json({ status: "success", cart, message: "Cart created." });
 };
 
 export const update = async (req, res) => {
   const { id } = req.params;
-  const manager = new cartManager();
-  const cart = await manager.updateOne(id, req.body);
-
-  if (cart) {
+  const cart = await cartManager.updateOne(id, req.body);
+  if (!cart) {
     return res
-      .status(201)
-      .send({ status: 'success', cart, message: 'Cart updated.' });
+      .status(404)
+      .json({ status: "error", message: "Cart not updated." });
   }
-  return res
-    .status(200)
-    .send({ status: "Error", messagge: "Cart not updated." });
+  res.status(201).json({ status: "success", cart, message: "Cart updated." });
 };
 
-export const deleteOne = async (req, res) => {
+export const deleteAllProducts = async (req, res) => {
   const { id } = req.params;
-  const manager = new cartManager();
-  const cart = await manager.deleteOne(id);
-
-  if (cart) {
+  const cart = await cartManager.deleteAllProducts(id);
+  if (!cart) {
     return res
-      .status(200)
-      .send({ status: 'success', message: 'Cart deleted.' })
+      .status(404)
+      .json({ status: "error", message: "Products not removed from cart" });
   }
-  return res
+  res
     .status(200)
-    .send({ status: 'Error', messagge: 'Cart not deleted' })
-
+    .json({ status: "success", cart, message: "Products removed from cart." });
 };
 
 export const addProduct = async (req, res) => {
   const { cid, pid } = req.params;
-  const manager = new cartManager();
-  const cart = await manager.addProduct(cid, pid);
-  if (cart) {
+  const cart = await cartManager.addProduct(cid, pid);
+  if (!cart) {
     return res
-      .status(201)
-      .send({ status: 'success', cart, message: 'Cart updated.' });
+      .status(404)
+      .json({ status: "error", message: "Cart not updated." });
   }
-  return res
-    .status(200)
-    .send({ status: "Error", messagge: "Cart not updated." });
-
+  res.status(201).json({ status: "success", cart, message: "Cart updated." });
 };
 
 export const updateProduct = async (req, res) => {
   const { cid, pid } = req.params;
   const quantity = +req.body.quantity;
-  const manager = new cartManager();
-  const cart = await manager.updateProduct(cid, pid, quantity);
-  if (cart) {
+  const cart = await cartManager.updateProduct(cid, pid, quantity);
+  if (!cart) {
     return res
-      .status(201)
-      .send({ status: 'success', cart, message: 'Cart updated.' });
+      .status(404)
+      .json({ status: "error", message: "Cart not updated." });
   }
-  return res
-    .status(200)
-    .send({ status: "Error", messagge: "Cart not updated." });
-
+  res.status(201).json({ status: "success", cart, message: "Cart updated." });
 };
 
 export const deleteProduct = async (req, res) => {
   const { cid, pid } = req.params;
-  const manager = new cartManager();
-  const cart = await manager.deleteProduct(cid, pid);
-  if (cart) {
+  const cart = await cartManager.deleteProduct(cid, pid);
+  if (!cart) {
     return res
-      .status(201)
-      .send({ status: 'success', cart, message: 'Product deleted.' });
+      .status(404)
+      .json({ status: "error", message: "Product not deleted." });
   }
-  return res
-    .status(200)
-    .send({ status: "Error", messagge: "Product not deleted." });
-
+  res
+    .status(201)
+    .json({ status: "success", cart, message: "Product deleted." });
 };
-
-
-
-
-
