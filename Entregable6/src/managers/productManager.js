@@ -14,10 +14,10 @@ class ProductManager {
       product.thumbnail &&
       product.code &&
       product.stock
-      ){
-        return true;
-      }
-      throw new Error('A product was expected');
+    ) {
+      return true;
+    }
+    throw new Error('A product was expected');
   }
 
   async paginate(req) {

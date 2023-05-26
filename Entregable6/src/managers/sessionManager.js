@@ -5,29 +5,34 @@ class SessionManager {
   constructor() {
   }
 
-  async login(req) {
-    const { email, password } = req.body;
+  async login(dto) {
+    const { email, password } = dto;
     const manager = new UserManager();
     if (!email && !password) {
       throw new Error('Login failed, invalid email or password.')
     }
     const user = await manager.getOneByEmail(email);
+    if (password.toString() === 'github') {
+      user.password = undefined;
+      return user;
+    }
     const isPassword = await bcrypt.compare(password, user.password);
     if (!isPassword) {
       throw new Error('Login failed, invalid email or password.')
     }
+    user.password = undefined;
     return user;
   }
 
-  async signup(req) {
-    const { email, password } = req.body;
+  async signup(dto) {
+    const { email, password } = dto;
     const manager = new UserManager();
     if (!email && !password) {
       throw new Error('Login failed, invalid email or password.')
     }
     const userHash = {
-      ...req.body,
-      password: await bcrypt.hash(req.body.password, 10),
+      ...dto,
+      password: await bcrypt.hash(password, 10),
     };
     return await manager.create(userHash);
   }

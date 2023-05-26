@@ -10,6 +10,12 @@ import userRouter from "./routes/userRouter.js";
 import cartRouter from './routes/cartRouter.js';
 import productRouter from './routes/productRouter.js';
 
+import initializePassport from "./config/passport.config.js";
+import passport from "passport";
+import { engine } from 'express-handlebars';
+import { resolve } from 'path';
+
+
 import errorHandler from './middlewares/errorHandler.js';
 
 import dotenv from "dotenv";
@@ -36,6 +42,26 @@ void (async () => {
       resave: false,
       saveUninitialized: false
     }));
+
+    const viewsPath = resolve('src/views');
+    server.engine('handlebars', engine({
+      layoutsDir: `${viewsPath}/layouts`,
+      defaultLayout: `${viewsPath}/layouts/main.handlebars`,
+    }));
+    server.set('view engine', 'handlebars');
+    server.set('views', viewsPath);
+    
+    server.get('/', (req, res)=> {
+      res.render('home');
+    });
+    
+    server.get('/login', (req, res)=>{
+      res.render('login');
+    });
+    
+        initializePassport();
+        server.use(passport.initialize());
+        server.use(passport.session());
 
     server.use('/api/products', productRouter);
     server.use('/api/carts', cartRouter);

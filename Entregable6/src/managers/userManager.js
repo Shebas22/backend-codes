@@ -9,24 +9,26 @@ class UserManager {
     if (
       user.firstName &&
       user.email &&
-      user.age &&
-      user.password
+      user.age
     ) {
+      if (user.password.toString() === 'github') {
+        user.password = ''
+      }
       return true;
     }
     throw new Error('A user was expected');
   }
 
   async paginate(req) {
-    return this.userDao.paginate(req);
+    return await this.userDao.paginate(req);
   }
 
   async getOneByEmail(email) {
-    return this.userDao.getOneByEmail(email);
+    return await this.userDao.getOneByEmail(email);
   }
 
   async getOne(id) {
-    return this.userDao.getOne(id);
+    return await this.userDao.getOne(id);
   }
 
   async create(data) {
@@ -37,12 +39,19 @@ class UserManager {
   }
 
   async updateOne(id, data) {
-    return this.userDao.updateOne(id, data);
+    return await this.userDao.updateOne(id, data);
   }
 
   async deleteOne(id) {
-    return this.userDao.deleteOne(id);
+    return await this.userDao.deleteOne(id);
   }
+
+  async forgetPassword(dto) {
+    const user = await this.userDao.getOneByEmail(dto.email);
+    user.password = dto.password;
+    return await this.userDao.updateOne(user.id, user);
+  }
+
 }
 
 export default UserManager;
