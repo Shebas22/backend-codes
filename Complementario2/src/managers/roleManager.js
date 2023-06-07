@@ -4,7 +4,7 @@ class RoleManager
 {
   constructor()
   {
-     this.roleDao = new RoleMongooseDao();
+    this.roleDao = new RoleMongooseDao();
   }
 
   async paginate(criteria)

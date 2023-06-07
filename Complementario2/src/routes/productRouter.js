@@ -5,7 +5,8 @@ import authorization from "../middlewares/authorization.js";
 
 const productRouter = Router();
 
-productRouter.get("/", auth, authorization('getProducts'), list);
+// productRouter.get("/", auth, authorization('getProducts'), list);
+productRouter.get("/", list);
 productRouter.get("/:id",auth, authorization('getProduct'), getOne);
 productRouter.post("/",auth, authorization('saveProduct'), auth, save);
 productRouter.put("/:id",auth, authorization('updateProduct'), auth, update);

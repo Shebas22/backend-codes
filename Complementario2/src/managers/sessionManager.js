@@ -1,7 +1,7 @@
 import UserMongooseDao from "../daos/userMongooseDao.js";
 import { createHash, generateToken, isValidPassword } from "../shared/access.js";
-import userCreateValidation from "../validations/user/userCreateValidation.js";
-import loginValidation from "../validations/session/loginValidation.js";
+// import userCreateValidation from "../validations/user/userCreateValidation.js";
+// import loginValidation from "../validations/session/loginValidation.js";
 
 class SessionManager {
   constructor() {
@@ -9,7 +9,7 @@ class SessionManager {
   }
 
   async login(email, password) {
-    await loginValidation.parseAsync({ email, password });
+    // await loginValidation.parseAsync({ email, password });
     const user = await this.userDao.getOneByEmail(email);
     const isHashedPassword = await isValidPassword(password, user.password);
     if (!isHashedPassword) {
@@ -19,7 +19,7 @@ class SessionManager {
   }
 
   async signup(payload) {
-    await userCreateValidation.parseAsync(payload);
+    // await userCreateValidation.parseAsync(payload);
     const dto = {
       ...payload,
       password: await createHash(payload.password, 10),

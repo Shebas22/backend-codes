@@ -1,19 +1,11 @@
 import { Router } from "express";
-import {
-  addProduct,
-  deleteAllProducts,
-  deleteProduct,
-  getOne,
-  list,
-  save,
-  update,
-  updateProduct,
-} from "../controllers/cartController.js";
+import { addProduct, deleteAllProducts, deleteProduct, getOne, list, save, update, updateProduct } from "../controllers/cartController.js";
 import auth from "../middlewares/auth.js";
 import authorization from "../middlewares/authorization.js";
 
 const cartRouter = Router();
 
+cartRouter.get("/", auth, list);
 cartRouter.get("/", auth, authorization('getCarts'), list);
 cartRouter.get("/:id", auth, authorization('getCart'), getOne);
 cartRouter.post("/", auth, authorization('saveCart'), save);

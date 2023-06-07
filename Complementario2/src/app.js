@@ -10,14 +10,10 @@ import userRouter from "./routes/userRouter.js";
 import cartRouter from './routes/cartRouter.js';
 import productRouter from './routes/productRouter.js';
 
-import initializePassport from "./config/passport.config.js";
-import passport from "passport";
-import { engine } from 'express-handlebars';
-import { resolve } from 'path';
-
 import errorHandler from './middlewares/errorHandler.js';
 
 import dotenv from "dotenv";
+import roleRouter from './routes/roleRouter.js';
 dotenv.config();
 
 void (async () => {
@@ -42,12 +38,11 @@ void (async () => {
       saveUninitialized: false
     }));
 
-    const viewsPath = resolve('src/views');
-    
     server.use('/api/products', productRouter);
     server.use('/api/carts', cartRouter);
     server.use('/api/sessions', sessionRouter);
     server.use('/api/users', userRouter);
+    server.use('/api/roles', roleRouter);
 
     server.use(errorHandler);
 

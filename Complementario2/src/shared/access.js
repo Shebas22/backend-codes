@@ -14,7 +14,7 @@ export const generateToken = async (user) => {
     const token = jwt.sign(
       { user: { ...user, password: undefined } },
       process.env.PRIVATE_KEY,
-      { expiresIn: "1m" }
+      { expiresIn: "1h" }
     );
     resolve(token);
   });

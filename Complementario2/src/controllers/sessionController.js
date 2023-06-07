@@ -3,7 +3,7 @@ import SessionManager from "../managers/sessionManager.js";
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    await loginValidation.parseAsync(req.body);
+    // await loginValidation.parseAsync(req.body);
     const manager = new SessionManager();
     const accessToken = await manager.login(email, password);
     res

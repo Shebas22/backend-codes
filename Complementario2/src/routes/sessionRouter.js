@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { forgetPassword, login, loginGithub, loginGithubCallback, logout, signup } from "../controllers/sessionController.js";
+import { current, login, signup } from "../controllers/sessionController.js";
+import auth from '../middlewares/auth.js';
 
 const sessionRouter = Router();
 

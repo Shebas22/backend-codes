@@ -1,4 +1,4 @@
-import roleSchema from "../models/roleSchema.js";
+import roleSchema from "./models/roleSchema.js";
 
 class RoleMongooseDao
 {
@@ -7,9 +7,9 @@ class RoleMongooseDao
     const { limit, page } = criteria;
     const roleDocuments = await roleSchema.paginate({}, { limit, page });
     roleDocuments.docs = roleDocuments.docs.map(document => ({
-      id: document._id,
-      name: document.name,
-      permissions: document.permissions
+      id: document?._id,
+      name: document?.name,
+      permissions: document?.permissions
     }));
     return roleDocuments;
   }
@@ -34,9 +34,9 @@ class RoleMongooseDao
     const roleDocument = await roleSchema.create(data);
 
     return {
-        id: roleDocument._id,
-        name: roleDocument.name,
-        permissions: roleDocument.permissions
+        id: roleDocument?._id,
+        name: roleDocument?.name,
+        permissions: roleDocument?.permissions
     }
   }
 
@@ -48,9 +48,9 @@ class RoleMongooseDao
       throw new Error('Role dont exist.');
     }
     return {
-        id: roleDocument._id,
-        name: roleDocument.name,
-        permissions: roleDocument.permissions
+        id: roleDocument?._id,
+        name: roleDocument?.name,
+        permissions: roleDocument?.permissions
     }
   }
 

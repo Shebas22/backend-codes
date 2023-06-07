@@ -5,11 +5,14 @@ class UserMongooseDao {
   async paginate(req) {
     const userDocuments = await userSchema.paginate(...new PaginationParameters(req).get());
     userDocuments.docs = userDocuments.docs.map(document => ({
-      id: document._id,
-      firstName: document.firstName,
-      lastName: document.lastName,
-      email: document.email,
-      age: document.age
+      id: document?._id,
+      firstName: document?.firstName,
+      lastName: document?.lastName,
+      email: document?.email,
+      age: document?.age,
+      carts: document?.carts,
+      isRoot: document?.isRoot,
+      role: document?.role,
     }));
     return userDocuments;
   }
@@ -25,7 +28,10 @@ class UserMongooseDao {
       lastName: userDocument?.lastName,
       email: userDocument?.email,
       age: userDocument?.age,
-      password: userDocument?.password
+      password: userDocument?.password,
+      carts: userDocument?.carts,
+      isRoot: userDocument?.isRoot,
+      role: userDocument?.role,
     }
   }
 
@@ -40,7 +46,10 @@ class UserMongooseDao {
       lastName: userDocument?.lastName,
       email: userDocument?.email,
       age: userDocument?.age,
-      password: userDocument?.password
+      password: userDocument?.password,
+      carts: userDocument?.carts,
+      isRoot: userDocument?.isRoot,
+      role: userDocument?.role,
     }
   }
 
@@ -50,12 +59,15 @@ class UserMongooseDao {
       throw new Error('User not created.')
     }
     return {
-      id: userDocument._id,
-      firstName: userDocument.firstName,
-      lastName: userDocument.lastName,
-      email: userDocument.email,
-      age: userDocument.age,
-      password: userDocument.password,
+      id: userDocument?._id,
+      firstName: userDocument?.firstName,
+      lastName: userDocument?.lastName,
+      email: userDocument?.email,
+      age: userDocument?.age,
+      password: userDocument?.password,
+      carts: userDocument?.carts,
+      isRoot: userDocument?.isRoot,
+      role: userDocument?.role,
     }
   }
 
@@ -65,12 +77,15 @@ class UserMongooseDao {
       throw new Error('User not found.')
     }
     return {
-      id: userDocument._id,
-      firstName: userDocument.firstName,
-      lastName: userDocument.lastName,
-      email: userDocument.email,
-      age: userDocument.age,
-      password: userDocument.password,
+      id: userDocument?._id,
+      firstName: userDocument?.firstName,
+      lastName: userDocument?.lastName,
+      email: userDocument?.email,
+      age: userDocument?.age,
+      password: userDocument?.password,
+      carts: userDocument?.carts,
+      isRoot: userDocument?.isRoot,
+      role: userDocument?.role,
     }
   }
 
