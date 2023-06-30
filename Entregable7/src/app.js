@@ -7,11 +7,11 @@ import sessionRouter from "./routes/sessionRouter.js";
 import userRouter from "./routes/userRouter.js";
 import cartRouter from './routes/cartRouter.js';
 import productRouter from './routes/productRouter.js';
+import roleRouter from './routes/roleRouter.js';
 
 import errorHandler from './middlewares/errorHandler.js';
 
 import dotenv from "dotenv";
-import roleRouter from './routes/roleRouter.js';
 dotenv.config();
 
 void (async () => {
