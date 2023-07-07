@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProduct, deleteAllProducts, deleteProduct, getOne, list, save, update, updateProduct } from "../controllers/cartController.js";
+import { addProduct, buy, deleteAllProducts, deleteProduct, getOne, list, save, update, updateProduct } from "../controllers/cartController.js";
 import auth from "../middlewares/auth.js";
 import authorization from "../middlewares/authorization.js";
 
@@ -15,5 +15,7 @@ cartRouter.delete("/:id", auth, authorization('deleteCart'), deleteAllProducts);
 cartRouter.post("/:cid/product/:pid", auth, authorization('addProduct'), addProduct);
 cartRouter.put("/:cid/product/:pid", auth, authorization('updateProduct'), updateProduct);
 cartRouter.delete("/:cid/product/:pid", auth, authorization('deleteProduct'), deleteProduct);
+
+cartRouter.post("/:cid/purchase", auth, authorization('buy'), buy);
 
 export default cartRouter;

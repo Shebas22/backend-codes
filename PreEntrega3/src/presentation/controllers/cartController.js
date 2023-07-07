@@ -80,3 +80,14 @@ export const deleteProduct = async (req, res, next) => {
     next(error)
   }
 };
+
+export const buy = async (req, res, next) => {
+  try {
+    // Logica de compra
+    // const { cid } = req.params;
+    // const cart = await cartManager.finalizePurchase(cid);
+    res.status(201).json({ status: "success", cart, message: "Completed purchase." });
+  } catch (error) {
+    next(error)
+  }
+};
