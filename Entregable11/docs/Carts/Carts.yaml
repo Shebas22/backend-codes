@@ -1,0 +1,276 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los carritos fueron obtenidos sactifactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/Product'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    post:
+      summary: Crea un carrito
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveCart'
+      responses:
+        "201":
+          description: Carrito creado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "400":
+          description: Carrito no creado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+  /api/carts/{id}:
+    get:
+      summary: Obtiene un carrito por id
+      tags:
+        - Carts
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del carrito que desea solicitar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El carrito fue obtenido sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    put:
+      summary: Actualiza un carrito por id
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveCart'
+      responses:
+        "201":
+          description: Carrito actualizado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "400":
+          description: Carrito no actualizado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    delete:
+      summary: Elimina un carrito por id
+      tags:
+        - Carts
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del carrito que desea eliminar
+        schema:
+          $type: String
+      responses:
+        "201":
+          description: Carrito eliminado sactifactoriamente
+        "400":
+          description: Carrito no eliminado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agrega un producto al carrito
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del producto que desea agregar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El producto fue agregado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    put:
+      summary: Actualiza un producto del carrito
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del producto que desea actualizar
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "201":
+          description: Producto actualizado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "400":
+          description: Producto no actualizado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    delete:
+      summary: Elimina un producto del carrito
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          $type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del producto que desea eliminar
+        schema:
+          $type: String
+      responses:
+        "201":
+          description: producto eliminado sactifactoriamente
+        "400":
+          description: Producto no eliminado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        products:
+          type: Array
+          description: Productos del carrito
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        _id: 64519b1be9d62896aaac9d31
+        products: [{id: 64519b1be9d62896aaac9d31, quantity: 2}]
+        status: true
+
+  requestBodies:
+    saveCart:
+      type: object
+      properties:
+        products:
+          type: Array
+          description: Productos del carrito
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        products: [{id: 64519b1be9d62896aaac9d31, quantity: 2}]
+        status: true
+        
+    updateProduct:
+      type: object
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad del producto
+      example:
+        quantity: 5
+

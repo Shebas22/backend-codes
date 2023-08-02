@@ -1,0 +1,200 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos sactifactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/Product'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    post:
+      summary: Crea un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveProduct'
+      responses:
+        "201":
+          description: Producto creado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "400":
+          description: Producto no creado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/products/{id}:
+    get:
+      summary: Obtiene un producto por id
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del producto que desea solicitar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El producto fue obtenido sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    put:
+      summary: Actualiza un usuario por id
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveProduct'
+      responses:
+        "201":
+          description: Producto actualizado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "400":
+          description: Producto no actualizado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    delete:
+      summary: Elimina un producto por id
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del producto que desea eliminar
+        schema:
+          $type: String
+      responses:
+        "201":
+          description: Producto eliminado sactifactoriamente
+        "400":
+          description: Producto no eliminado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Imágenes del producto
+        code:
+          type: String
+          description: Código de producto, este campo es único
+        stock:
+          type: Number
+          description: Cantidad de productos en stock
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        _id: 64519b1be9d62896aaac9d31
+        title: Ajo
+        description: Aqui va la descripción del producto
+        price: 150
+        thumbnail:  ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
+        code: ajo150
+        stock: 50
+        status: true
+
+  requestBodies:
+    saveProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Imágenes del producto
+        code:
+          type: String
+          description: Código de producto, este campo es único
+        stock:
+          type: Number
+          description: Cantidad de productos en stock
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        title: Ajo
+        description: Aqui va la descripción del producto
+        price: 150
+        thumbnail: ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
+        code: ajo150
+        stock: 50

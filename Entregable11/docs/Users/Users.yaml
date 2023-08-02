@@ -1,0 +1,198 @@
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Los usuarios fueron obtenidos sactifactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/User'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    post:
+      summary: Crea un usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveUser'
+      responses:
+        "201":
+          description: Usuario creado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "400":
+          description: Usuario no creado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/users/{id}:
+    get:
+      summary: Obtiene un usuario por id
+      tags:
+        - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del usuario que desea solicitar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: El usuario fue obtenido sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    put:
+      summary: Actualiza un usuario por id
+      tags:
+        - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del usuario que desea actualizar
+        schema:
+          $type: String
+      responses:
+        "201":
+          description: Usuario actualizado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "400":
+          description: Usuario no actualizado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+    delete:
+      summary: Elimina un usuario por id
+      tags:
+        - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: id del usuario que desea eliminar
+        schema:
+          $type: String
+      responses:
+        "201":
+          description: Usuario eliminado sactifactoriamente
+        "400":
+          description: Usuario no eliminado, parámetros inválidos
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        firstName:
+          type: String
+          description: Nombre del usuario
+        lastName:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        age:
+          type: Number
+          description: Edad del usuario
+        carts:
+          type: ObjectId
+          description: Carritos asociados al usuario
+        role:
+          type: ObjectId
+          description: Role del usuario en el sistema
+        isRoot:
+          type: Boolean
+          description: Indicador de superusuario
+        password:
+          type: string
+          description: Contraseña Hasheada del usuario.
+      example:
+        _id: e38b8c323f3a0babesdc307e
+        firstName: Mauricio
+        lastName: espinosa
+        email: Mauricioespinosa@dominio.com
+        age:  22
+        carts: 236faljc366c25877bb6b896
+        role: 647faadb366c27517bb6b349
+        isRoot: false
+        password: $2b$1052jc7260TEOFikbhKyTlUy.ks4100ctgt30dzu/ibdUrsdSIDp2jka
+
+  requestBodies:
+    saveUser:
+      type: object
+      properties:
+        firstName:
+          type: String
+          description: Nombre del usuario
+        lastName:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        age:
+          type: Number
+          description: Edad del usuario
+        password:
+          type: string
+          description: Contraseña del usuario (será hasheada)
+      example:
+        firstName: Sebastian
+        lastName: Navarro
+        email: sebastiannavarro@dominio.com
+        age:  32
+        password: 12345678

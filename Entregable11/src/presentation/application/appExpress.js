@@ -1,5 +1,8 @@
 import express from 'express';
 import cookieParser from "cookie-parser";
+import swaggerUiExpress from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import { resolve } from 'path';
 
 import sessionRouter from "../routes/sessionRouter.js";
 import userRouter from "../routes/userRouter.js";
@@ -11,6 +14,21 @@ import errorHandler from "../middlewares/errorHandler.js";
 
 class AppExpress {
 
+    constructor() {
+        this.docsPath = resolve('./docs');
+        this.swaggerOptions = {
+            definition: {
+                openapi: '3.0.1',
+                info: {
+                    title: "Ecommerce API",
+                    description: "Proyecto Final Coder - API de ECommerce"
+                }
+            },
+            apis: [`${this.docsPath}/**/*.yaml`]
+        }
+        this.specs = swaggerJsdoc(this.swaggerOptions)
+    }
+
     init() {
         this.server = express();
         this.server.use(express.json());
@@ -19,6 +37,7 @@ class AppExpress {
     }
 
     build() {
+        this.server.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(this.specs))
         this.server.use('/api/products', productRouter);
         this.server.use('/api/carts', cartRouter);
         this.server.use('/api/sessions', sessionRouter);
