@@ -4,7 +4,7 @@ import auth from '../middlewares/auth.js';
 
 const sessionRouter = Router();
 
-sessionRouter.post('/logout', logout);
+sessionRouter.post('/logout', auth, logout);
 
 sessionRouter.post('/login', login);
 sessionRouter.get('/current', auth, current);

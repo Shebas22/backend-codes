@@ -17,7 +17,7 @@ export const login = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .send({ status: "success", message: "Login success.", accessToken });
+      .send({ status: "success", message: "Login success."});
   } catch (error) {
     next(error);
   }
@@ -34,7 +34,7 @@ export const current = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .send({ status: "success", message: "Current.", accessToken , payload: req.user});
+      .send({ status: "success", message: "Current.", payload: req.user});
   } catch (error) {
     next(error);
   }
@@ -76,7 +76,7 @@ export const forgetPasswordRequest = async (req, res, next) => {
     const manager = new EmailManager();
     await manager.send('forgetPassword.hbs', user,accessToken);
     req.logger.info("Email sended.");
-    res.send({ status: 'success' , message: "Email sended."});
+    res.status(200).send({ status: 'success' , message: "Email sended."});
 }
 catch (e) {
     next(e);

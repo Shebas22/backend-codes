@@ -1,0 +1,207 @@
+paths:
+  /api/sessions/signup:
+    post:
+      summary: Registro de usuario
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/signup'
+      responses:
+        "201":
+          description: Usuario creado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "400":
+          description: Usuario no creado, parámetros inválidos
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/sessions/login:
+    post:
+      summary: Login al sistema
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/login'
+      responses:
+        "201":
+          description: Usuario logueado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/sessions/current:
+    get:
+      summary: Renovación de token
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/current'
+      responses:
+        "200":
+          description: Token renovado sactifactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/sessions/logout:
+    post:
+      summary: Deslogueo del sistema
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/current'
+      responses:
+        "200":
+          description: Usuario deslogueado sactifactoriamente
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/sessions/forget-password/request:
+    get:
+      summary: Solicitud de cambio de contraseña
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/forgetPasswordRequest'
+      responses:
+        "200":
+          description: Email enviado satisfactoriamente
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+  /api/sessions/forget-password/changePassword:
+    put:
+      summary: Deslogueo del sistema
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/changePassword'
+      responses:
+        "201":
+          description: Contraseña cambiada satisfactoriamente
+        "401":
+          description: Sin autorización
+        "403":
+          description: Usuario no logueado
+        "404":
+          description: Recurso no encontrado
+        "500":
+          description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Imágenes del producto
+        code:
+          type: String
+          description: Código de producto, este campo es único
+        stock:
+          type: Number
+          description: Cantidad de productos en stock
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        _id: 64519b1be9d62896aaac9d31
+        title: Ajo
+        description: Aqui va la descripción del producto
+        price: 150
+        thumbnail:  ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
+        code: ajo150
+        stock: 50
+        status: true
+
+  requestBodies:
+    saveProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Imágenes del producto
+        code:
+          type: String
+          description: Código de producto, este campo es único
+        stock:
+          type: Number
+          description: Cantidad de productos en stock
+        status:
+          type: Boolean
+          description: Indicador de estado
+      example:
+        title: Ajo
+        description: Aqui va la descripción del producto
+        price: 150
+        thumbnail: ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
+        code: ajo150
+        stock: 50

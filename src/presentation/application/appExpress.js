@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from "cookie-parser";
 import swaggerUiExpress from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import { SwaggerTheme } from 'swagger-themes';
 import compression from "express-compression";
 import { resolve } from 'path';
 import { addLogger } from '../../shared/logger.js';
@@ -18,6 +19,7 @@ import errorHandler from "../middlewares/errorHandler.js";
 class AppExpress {
 
     constructor() {
+        this.theme = new SwaggerTheme('v3');
         this.docsPath = resolve('./docs');
         this.swaggerOptions = {
             definition: {
@@ -48,7 +50,11 @@ class AppExpress {
     }
 
     build() {
-        this.server.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(this.specs))
+        const optionsTheme = {
+            explorer: true,
+            customCss: this.theme.getBuffer('dark')
+        };
+        this.server.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(this.specs, optionsTheme))
         this.server.use('/api/products', productRouter);
         this.server.use('/api/carts', cartRouter);
         this.server.use('/api/sessions', sessionRouter);
