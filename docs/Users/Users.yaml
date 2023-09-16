@@ -79,6 +79,12 @@ paths:
       summary: Actualiza un usuario por id
       tags:
         - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateUser'
       parameters:
       - name: id
         in: path
@@ -195,4 +201,28 @@ components:
         lastName: Navarro
         email: sebastiannavarro@dominio.com
         age:  32
-        password: 12345678
+        password: "12345678"
+    updateUser:
+      type: object
+      properties:
+        firstName:
+          type: String
+          description: Nombre del usuario
+        lastName:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        age:
+          type: Number
+          description: Edad del usuario
+        password:
+          type: string
+          description: Contraseña del usuario (será hasheada)
+      example:
+        firstName: Sebastian
+        lastName: Navarro
+        email: sebastiannavarro@dominio.com
+        age:  32
+        password: "12345678"

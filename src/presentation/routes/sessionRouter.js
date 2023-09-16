@@ -11,7 +11,7 @@ sessionRouter.get('/current', auth, current);
 sessionRouter.post('/signup', signup);
 
 sessionRouter.get('/forget-password/form',  forgetPassword)
-sessionRouter.get('/forget-password/request', forgetPasswordRequest);
+sessionRouter.post('/forget-password/request', forgetPasswordRequest);
 sessionRouter.put('/forget-password/changePassword',auth, changePassword);
 
 export default sessionRouter;

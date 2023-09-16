@@ -50,12 +50,12 @@ paths:
       summary: Renovación de token
       tags:
         - Sessions
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#components/requestBodies/current'
+      # requestBody:
+      #   required: true
+      #   content:
+      #     application/json:
+      #       schema:
+      #         $ref: '#components/requestBodies/current'
       responses:
         "200":
           description: Token renovado sactifactoriamente
@@ -76,12 +76,6 @@ paths:
       summary: Deslogueo del sistema
       tags:
         - Sessions
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#components/requestBodies/current'
       responses:
         "200":
           description: Usuario deslogueado sactifactoriamente
@@ -94,7 +88,7 @@ paths:
         "500":
           description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
   /api/sessions/forget-password/request:
-    get:
+    post:
       summary: Solicitud de cambio de contraseña
       tags:
         - Sessions
@@ -113,7 +107,7 @@ paths:
           description: Error interno del servidor, parámetros inválidos o no hay conexión con la base de datos
   /api/sessions/forget-password/changePassword:
     put:
-      summary: Deslogueo del sistema
+      summary: Cambiar contraseña
       tags:
         - Sessions
       requestBody:
@@ -136,72 +130,97 @@ paths:
 
 components:
   schemas:
-    Product:
+    User:
       type: object
       properties:
         _id:
           type: ObjectId
           description: id autogenerado de mongo
-        title:
+        firstName:
           type: String
-          description: Nombre del producto
-        description:
+          description: Nombre del usuario
+        lastName:
           type: String
-          description: Descripción del producto
-        price:
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        age:
           type: Number
-          description: Precio del producto
-        thumbnail:
-          type: Array
-          description: Imágenes del producto
-        code:
-          type: String
-          description: Código de producto, este campo es único
-        stock:
-          type: Number
-          description: Cantidad de productos en stock
-        status:
+          description: Edad del usuario
+        carts:
+          type: ObjectId
+          description: Carritos asociados al usuario
+        role:
+          type: ObjectId
+          description: Role del usuario en el sistema
+        isRoot:
           type: Boolean
-          description: Indicador de estado
+          description: Indicador de superusuario
+        password:
+          type: string
+          description: Contraseña Hasheada del usuario.
       example:
-        _id: 64519b1be9d62896aaac9d31
-        title: Ajo
-        description: Aqui va la descripción del producto
-        price: 150
-        thumbnail:  ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
-        code: ajo150
-        stock: 50
-        status: true
+        _id: e38b8c323f3a0babesdc307e
+        firstName: Mauricio
+        lastName: espinosa
+        email: Mauricioespinosa@dominio.com
+        age:  22
+        carts: 236faljc366c25877bb6b896
+        role: 647faadb366c27517bb6b349
+        isRoot: false
+        password: $2b$1052jc7260TEOFikbhKyTlUy.ks4100ctgt30dzu/ibdUrsdSIDp2jka
 
   requestBodies:
-    saveProduct:
+    signup:
       type: object
       properties:
-        title:
+        firstName:
           type: String
-          description: Nombre del producto
-        description:
+          description: Nombre del usuario
+        lastName:
           type: String
-          description: Descripción del producto
-        price:
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        age:
           type: Number
-          description: Precio del producto
-        thumbnail:
-          type: Array
-          description: Imágenes del producto
-        code:
-          type: String
-          description: Código de producto, este campo es único
-        stock:
-          type: Number
-          description: Cantidad de productos en stock
-        status:
-          type: Boolean
-          description: Indicador de estado
+          description: Edad del usuario
+        password:
+          type: string
+          description: Contraseña del usuario (será hasheada)
       example:
-        title: Ajo
-        description: Aqui va la descripción del producto
-        price: 150
-        thumbnail: ["https://i.imgur.com/W9XGUbf.png","https://i.imgur.com/W9XGUbf.png"]
-        code: ajo150
-        stock: 50
+        firstName: Sebastian
+        lastName: Navarro
+        email: sebastiannavarro@dominio.com
+        age:  32
+        password: "12345678"
+    login:
+      type: object
+      properties:
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        password:
+          type: string
+          description: Contraseña del usuario (será hasheada)
+      example:
+        email: sebastiannavarro@dominio.com
+        password: "12345678"
+    changePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          description: Contraseña del usuario (será hasheada)
+      example:
+        password: "12345678"
+    forgetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+      example:
+        email: sebastiannavarro@dominio.com
